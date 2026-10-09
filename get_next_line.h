@@ -16,7 +16,9 @@
 # include <stddef.h>
 # include <stdio.h>
 
-# define BUFFER_SIZE 1024
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1024
+# endif
 
 typedef struct s_state
 {
@@ -36,7 +38,9 @@ void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 void	*ft_realloc(void *ptr, size_t old, size_t new);
 
-void	string_init(t_string *str, size_t initial);
+char	*get_next_line(int fd);
+
+int		string_init(t_string *str, size_t initial);
 
 int		string_push(t_string *str, char c);
 
