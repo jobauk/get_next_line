@@ -3,9 +3,9 @@ CC := cc
 CFLAGS := -Wall -Wextra -Werror -pedantic
 
 # Compiler debug
-LD_FLAGS := -fsanitize=address,undefined
+LD_FLAGS := -fsanitize=undefined
 DEBUG_CFLAGS := $(CFLAGS) \
-	-g3 -Og -fno-omit-frame-pointer \
+	-g3 -O0 -fno-omit-frame-pointer \
 	-fstrict-aliasing -Wcast-align \
 	-Wconversion -Wsign-conversion \
 	-Wshadow -Wundef \

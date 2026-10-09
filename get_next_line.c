@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <_string.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -52,57 +50,57 @@ static t_strbuf	*strbuf_append(t_strbuf *strbuf, const char *src, size_t len)
 	strbuf->buf[strbuf->len] = '\0';
 	return (strbuf);
 }
+// 0 + 5 - 3 = 2
+// start: 2
+// delim: 4
+static t_strbuf	*strbuf_append_until(t_strbuf *strbuf, t_state *state)
+{
+	char	*start;
+	char	*delim;
+
+	start = state->buf + state->size - state->remaining;
+	delim = f_memchr(start, '\n', state->remaining);
+	if (!delim)
+	{
+		strbuf = strbuf_append(strbuf, start, state->remaining);
+		state->remaining = 0;
+	}
+	else
+	{
+		strbuf = strbuf_append(strbuf, start, (size_t)(delim - start + 1));
+		state->remaining -= (size_t)(delim - start + 1);
+	}
+	return (strbuf);
+}
 
 char	*get_next_line(int fd)
 {
-	static char		buf[BUFFER_SIZE];
-	static char		*ln_end;
-	static ssize_t	n;
-	t_strbuf		*ln;
-	char			*lnbuf;
+	static t_state	state;
+	t_strbuf		*strbuf;
 
-	ln = NULL;
-	ln_end = NULL;
-	do {
-		if (ln_end)
-		{
-			ln = strbuf_append(ln, ln_end + 1, (size_t)n - (size_t)(ln_end - buf) - 1);
-		}
-		n = read(fd, buf, sizeof(buf));
-		ln_end = (char *)f_memchr(buf, '\n', (size_t)n);
-
-	} while (n > 0);
-	// while (1)
-	// {
-	// 	ln_end = (char *)f_memchr(buf, '\n', (size_t)n);
-	// 	if (ln_end)
-	// 	{
-	// 		ln = strbuf_append(ln, ln_end + 1, (size_t)n - (size_t)(ln_end - buf) - 1);
-	// 		ln = NULL;
-	// 	}
-	// 	n = read(fd, buf, BUFFER_SIZE);
-	// 	if (n <= 0)
-	// 	{
-	// 		ln = NULL;
-	// 		break ;
-	// 	}
-	// 	ln_end = (char *)f_memchr(buf, '\n', (size_t)n);
-	// 	if (ln_end)
-	// 	{
-	// 		ln = strbuf_append(ln, buf, (size_t)(ln_end - buf));
-	// 		break ;
-	// 	}
-	// 	ln = strbuf_append(ln, buf, (size_t)n);
-	// }
-	if (n == -1)
+	strbuf = NULL;
+	while (1)
 	{
-		free(ln->buf);
-		free(ln);
-		return (NULL);
+		strbuf = strbuf_append_until(strbuf, &state);
+		if (!strbuf || state.remaining)
+			break ;
+		if (state.size > 0 && state.buf[state.size - 1] == '\n')
+		{
+			state.size = 0;
+			break ;
+		}
+		if (!state.remaining && !(state.size > 0 && state.buf[state.size - 1] == '\n'))
+		{
+			state.size = read(fd, state.buf, sizeof(state.buf));
+			if (state.size > 0)
+				state.remaining = (size_t)state.size;
+		}
+		if (state.size <= 0)
+			break ;
 	}
-	lnbuf = ln->buf;
-	free(ln);
-	return (lnbuf);
+	if (state.size == -1 || strbuf->len == 0)
+		return (NULL);
+	return (strbuf->buf);
 }
 
 #include <fcntl.h>
@@ -113,9 +111,17 @@ int main(void) {
 	if (fd == -1)
 		return -1;
 
-	puts(get_next_line(fd));
-	puts(get_next_line(fd));
-	puts(get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
 
 	return 0;
 }

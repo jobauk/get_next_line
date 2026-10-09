@@ -14,16 +14,22 @@
 # define GET_NEXT_LINE_H
 
 # include <stddef.h>
+# include <stdio.h>
 
-# define BUFFER_SIZE 1024
+# define BUFFER_SIZE 1
 
-# define MIN(a, b) ((a) < (b) ? (a) : (b))
-
-typedef struct s_strbuf {
+typedef struct s_strbuf
+{
 	size_t	len;
-	// size_t	cap;
 	char	*buf;
 }			t_strbuf;
+
+typedef struct s_state
+{
+	char	buf[BUFFER_SIZE];
+	ssize_t	size;
+	size_t	remaining;
+}			t_state;
 
 char	*get_next_line(int fd);
 
