@@ -1,10 +1,15 @@
 # Compiler
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -pedantic
 
 # Compiler debug
 LD_FLAGS := -fsanitize=address,undefined
-DEBUG_CFLAGS := $(CFLAGS) -g3 -O0 -fno-omit-frame-pointer $(LD_FLAGS)
+DEBUG_CFLAGS := $(CFLAGS) \
+	-g3 -Og -fno-omit-frame-pointer \
+	-fstrict-aliasing -Wcast-align \
+	-Wconversion -Wsign-conversion \
+	-Wshadow -Wundef \
+	$(LD_FLAGS)
 
 OUTDIR := target
 
