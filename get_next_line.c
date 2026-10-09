@@ -12,39 +12,49 @@
 
 #include "get_next_line.h"
 #include <stddef.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-void	fd_getc(int fd, char *out)
+int	fd_getc(int fd)
 {
 	static t_state	states[20];
 	t_state			*state;
 
 	state = &states[fd];
-	if (state->i < (size_t)state->n)
+	if (state->n <= 0 || state->i >= (size_t)state->n)
 	{
-		*out = state->buf[state->i++];
-		return ;
+		state->i = 0;
+		state->n = read(fd, state->buf, sizeof(state->buf));
+		if (state->n <= 0)
+			return ((int)state->n);
 	}
-	state->i = 0;
-	state->n = read(fd, state->buf, sizeof(state->buf));
-	if (state->n == -1 || state->n == 0)
-		*out = '\0';
-	else
-		*out = state->buf[state->i++];
+	return (state->buf[state->i++]);
 }
 
 char	*get_next_line(int fd)
 {
 	t_string	str;
-	char		c;
+	int			c;
 
-	str = (t_string){.buf = NULL, .len = 0, .cap = 0};
-	while ((fd_getc(fd, &c), c != '\n' && c != '\0'))
-		string_push(&str, c);
-	if (c == '\n')
-		string_push(&str, '\n');
-	if (str.buf)
-		string_push(&str, '\0');
+	str = (t_string){0};
+	while (1)
+	{
+		c = fd_getc(fd);
+		if (c <= 0)
+			break ;
+		if (string_push(&str, (char)c) != 0)
+		{
+			free(str.buf);
+			return (NULL);
+		}
+		if (c == '\n')
+			break ;
+	}
+	if (c == -1 || (str.buf && string_push(&str, '\0') != 0))
+	{
+		free(str.buf);
+		return (NULL);
+	}
 	return (str.buf);
 }
 
