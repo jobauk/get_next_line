@@ -10,74 +10,52 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
 #include <stddef.h>
-#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
-static inline uint64_t	read_u64(const void *s)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	const unsigned char	*p;
-	uint64_t			word;
-
-	p = s;
-	word = (uint64_t)p[0];
-	word |= (uint64_t)p[1] << 8;
-	word |= (uint64_t)p[2] << 16;
-	word |= (uint64_t)p[3] << 24;
-	word |= (uint64_t)p[4] << 32;
-	word |= (uint64_t)p[5] << 40;
-	word |= (uint64_t)p[6] << 48;
-	word |= (uint64_t)p[7] << 56;
-	return (word);
+	return (memcpy(dst, src, n));
 }
 
-static inline size_t	indexof_non_zero_byte(uint64_t word)
+void	*ft_realloc(void *ptr, size_t old, size_t new)
 {
-	size_t	i;
+	void	*new_ptr;
 
-	i = 0;
-	if (!(word & 0xffffffffULL))
+	new_ptr = malloc(new);
+	if (!new_ptr)
 	{
-		word >>= 32;
-		i += 4;
+		free(ptr);
+		return (NULL);
 	}
-	if (!(word & 0xffffULL))
-	{
-		word >>= 16;
-		i += 2;
-	}
-	if (!(word & 0xffULL))
-	{
-		word >>= 8;
-		i++;
-	}
-	return (i);
+	ft_memcpy(new_ptr, ptr, old);
+	free(ptr);
+	return (new_ptr);
 }
 
-void	*f_memchr(const void *s, int c, size_t n)
+void	string_init(t_string *str, size_t initial)
 {
-	uint64_t			pattern;
-	uint64_t			word;
-	uint64_t			matches;
-	const unsigned char	*ptr;
+	char	*buf;
 
-	pattern = (uint64_t)(unsigned char)c * 0x0101010101010101ULL;
-	ptr = s;
-	while (n >= 8)
+	buf = malloc(initial * sizeof(char));
+	str->buf = buf;
+	if (str->buf)
+		str->cap = initial;
+}
+
+int	string_push(t_string *str, char c)
+{
+	if (!str->buf)
+		string_init(str, 128);
+	if (str->len + 1 >= str->cap)
 	{
-		word = read_u64(ptr);
-		word ^= pattern;
-		matches = (word - 0x0101010101010101ULL)
-			& ~word & 0x8080808080808080ULL;
-		if (matches)
-			return ((void *)(ptr + indexof_non_zero_byte(matches)));
-		ptr += 8;
-		n -= 8;
+		str->cap = (size_t)((double)str->cap * 1.5);
+		str->buf = ft_realloc(str->buf, str->len, str->cap);
 	}
-	while (n--)
-	{
-		if (*ptr == (unsigned char)c)
-			return ((void *)ptr);
-		ptr++;
-	}
-	return (NULL);
+	if (!str->buf)
+		return (0);
+	str->buf[str->len++] = c;
+	return (1);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line.h                                    :+:    :+:            */
+/*   get_next_line_utils.h                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
@@ -16,23 +16,28 @@
 # include <stddef.h>
 # include <stdio.h>
 
-# define BUFFER_SIZE 1
-
-typedef struct s_strbuf
-{
-	size_t	len;
-	char	*buf;
-}			t_strbuf;
+# define BUFFER_SIZE 1024
 
 typedef struct s_state
 {
 	char	buf[BUFFER_SIZE];
-	ssize_t	size;
-	size_t	remaining;
+	size_t	i;
+	ssize_t	n;
 }			t_state;
 
-char	*get_next_line(int fd);
+typedef struct s_string
+{
+	char	*buf;
+	size_t	len;
+	size_t	cap;
+}			t_string;
 
-void	*f_memchr(const void *s, int c, size_t n);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+
+void	*ft_realloc(void *ptr, size_t old, size_t new);
+
+void	string_init(t_string *str, size_t initial);
+
+int		string_push(t_string *str, char c);
 
 #endif
