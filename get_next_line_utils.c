@@ -35,27 +35,26 @@ void	*ft_realloc(void *ptr, size_t old, size_t new)
 	return (new_ptr);
 }
 
-void	string_init(t_string *str, size_t initial)
+int	string_init(t_string *str, size_t initial)
 {
-	char	*buf;
-
-	buf = malloc(initial * sizeof(char));
-	str->buf = buf;
-	if (str->buf)
-		str->cap = initial;
+	str->buf = malloc(initial * sizeof(char));
+	if (!str->buf)
+		return (-1);
+	str->cap = initial;
+	return (0);
 }
 
 int	string_push(t_string *str, char c)
 {
-	if (!str->buf)
-		string_init(str, 128);
+	if (!str->buf && string_init(str, 128) != 0)
+		return (-1);
 	if (str->len + 1 >= str->cap)
 	{
 		str->cap = (size_t)((double)str->cap * 1.5);
 		str->buf = ft_realloc(str->buf, str->len, str->cap);
 	}
 	if (!str->buf)
-		return (0);
+		return (-1);
 	str->buf[str->len++] = c;
-	return (1);
+	return (0);
 }
