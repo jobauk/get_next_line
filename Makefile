@@ -1,6 +1,6 @@
 # Compiler
 CC := cc
-CFLAGS := -Wall -Wextra -Werror -pedantic
+CFLAGS := -Wall -Wextra -Werror -pedantic -MMD -MP
 
 # Compiler debug
 LD_FLAGS := -fsanitize=undefined
@@ -16,8 +16,7 @@ OUTDIR := target
 # Source
 SRCS := get_next_line.c get_next_line_utils.c
 OBJS := $(SRCS:%.c=$(OUTDIR)/%.o)
-
-DEBUG_OBJS := $(SRCS:%.c=$(OUTDIR)/%.o)
+DEPS := $(SRCS:%.c=$(OUTDIR)/%.d)
 
 TEST_SRCS := $(wildcard .tests/*.c)
 TEST_OBJS := $(TEST_SRCS:.tests/%.c=$(OUTDIR)/tests/%.o)
@@ -62,10 +61,10 @@ $(OUTDIR)/tests/%.o: .tests/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(DEBUG_CFLAGS) $(CRITERION_CFLAGS) -c $< -o $@
 
-$(TEST_BIN): $(DEBUG_OBJS) $(TEST_OBJS)
+$(TEST_BIN): $(OBJS) $(TEST_OBJS)
 	@$(CC) $(LD_FLAGS) $^ $(CRITERION_LIBS) -o $@
 
-$(DEBUG_BIN): $(DEBUG_OBJS)
+$(DEBUG_BIN): $(OBJS)
 	@$(CC) $(LD_FLAGS) $^ -o $@
 
 clean:
@@ -75,3 +74,5 @@ fclean: clean
 	@rm -f $(TEST_BIN) $(DEBUG_BIN)
 
 re: fclean all
+
+-include $(DEPS)
