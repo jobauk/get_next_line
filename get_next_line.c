@@ -6,7 +6,7 @@
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/09/29 14:41:24 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/09/29 14:47:45 by jaukes        ########   odam.nl         */
+/*   Updated: 2026/10/12 23:24:25 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	fd_getc(int fd)
 	static t_state	states[20];
 	t_state			*state;
 
+	if (fd >= 20)
+		return (-1);
 	state = &states[fd];
 	if (state->n <= 0 || state->i >= (size_t)state->n)
 	{
@@ -37,6 +39,8 @@ char	*get_next_line(int fd)
 	int			c;
 
 	str = (t_string){0};
+	if (fd == -1)
+		return (NULL);
 	while (1)
 	{
 		c = fd_getc(fd);
@@ -50,32 +54,33 @@ char	*get_next_line(int fd)
 		if (c == '\n')
 			break ;
 	}
-	if (c == -1 || (str.buf && string_push(&str, '\0') != 0))
+	if (c == -1 || (str.buf && string_push(&str, '\0') != 0) || !str.buf)
 	{
 		free(str.buf);
 		return (NULL);
 	}
-	return (str.buf);
+	return (string_resize_fit(&str));
 }
 
 // #include <fcntl.h>
-// #include "stdio.h"
+// #include <stdio.h>
+// #include <string.h>
 
 // int main(void) {
-// 	int fd = open("small.txt", O_RDONLY);
-// 	if (fd == -1)
-// 		return -1;
+// 	int fd;
 
-// 	printf("\"%s\"\n", get_next_line(fd));
-// 	printf("\"%s\"\n", get_next_line(fd));
+// 	fd = open("small.txt", O_RDONLY);
+// 	printf("\"%d\"\n", strcmp(get_next_line(fd), "0") == 0);
+// 	// printf("\"%s\"\n", get_next_line(fd));
 
 // 	// close(fd);
-// 	fd = open("input.txt", O_RDONLY);
-// 	if (fd == -1)
-// 		return -1;
+// 	// fd = open("input.txt", O_RDONLY);
+// 	// printf("\"%s\"\n", get_next_line(fd));
+// 	// printf("\"%s\"\n", get_next_line(fd));
 
-// 	printf("\"%s\"\n", get_next_line(fd));
-// 	printf("\"%s\"\n", get_next_line(fd));
+// 	// fd = open("files/empty", O_RDWR);
+// 	// printf("\"%s\"\n", get_next_line(fd));
+// 	// printf("\"%s\"\n", get_next_line(fd));
 
 // 	return 0;
 // }

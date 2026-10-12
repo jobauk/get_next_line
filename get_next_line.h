@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line_utils.h                              :+:    :+:            */
+/*   get_next_line.h                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2026/09/29 14:41:24 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/09/29 14:47:45 by jaukes        ########   odam.nl         */
+/*   Created: 2026/10/12 23:24:07 by jaukes        #+#    #+#                 */
+/*   Updated: 2026/10/12 23:24:13 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,7 @@ char	*get_next_line(int fd);
 int		string_init(t_string *str, size_t initial);
 
 int		string_push(t_string *str, char c);
+
+char	*string_resize_fit(t_string *str);
 
 #endif

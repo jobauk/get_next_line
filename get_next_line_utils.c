@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2026/09/29 14:41:24 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/09/29 14:47:45 by jaukes        ########   odam.nl         */
+/*   Created: 2026/10/12 23:20:17 by jaukes        #+#    #+#                 */
+/*   Updated: 2026/10/12 23:23:36 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,9 @@ int	string_push(t_string *str, char c)
 		return (-1);
 	str->buf[str->len++] = c;
 	return (0);
+}
+
+char	*string_resize_fit(t_string *str)
+{
+	return (ft_realloc(str->buf, str->len, str->len));
 }
