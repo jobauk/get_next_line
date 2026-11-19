@@ -6,7 +6,7 @@
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/09/29 14:41:24 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/10/12 23:24:25 by jaukes        ########   odam.nl         */
+/*   Updated: 2026/11/19 13:20:51 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 int	fd_getc(int fd)
 {
-	static t_state	states[20];
+	static t_state	states[NSTATES];
 	t_state			*state;
 
-	if (fd >= 20)
+	if (fd >= NSTATES || fd == -1)
 		return (-1);
 	state = &states[fd];
 	if (state->n <= 0 || state->i >= (size_t)state->n)
@@ -69,9 +69,10 @@ char	*get_next_line(int fd)
 // int main(void) {
 // 	int fd;
 
-// 	fd = open("small.txt", O_RDONLY);
-// 	printf("\"%d\"\n", strcmp(get_next_line(fd), "0") == 0);
-// 	// printf("\"%s\"\n", get_next_line(fd));
+// 	fd = open("input.txt", O_CREAT | O_RDWR);
+// 	// write(fd, "0", 1);
+// 	printf("\"%s\"\n", get_next_line(fd));
+// 	printf("\"%s\"\n", get_next_line(fd));
 
 // 	// close(fd);
 // 	// fd = open("input.txt", O_RDONLY);

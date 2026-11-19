@@ -6,7 +6,7 @@
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/12 23:20:17 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/10/12 23:23:36 by jaukes        ########   odam.nl         */
+/*   Updated: 2026/11/19 13:00:41 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	return (memcpy(dst, src, n));
+	size_t	i;
+
+	i = 0;
+	if (!dest && !src)
+		return (NULL);
+	while (i < n)
+	{
+		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
+		i++;
+	}
+	return (dest);
 }
 
 void	*ft_realloc(void *ptr, size_t old, size_t new)
