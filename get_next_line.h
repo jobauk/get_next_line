@@ -20,10 +20,6 @@
 #  define BUFFER_SIZE 1024
 # endif
 
-# ifndef NSTATES
-#  define NSTATES 100
-# endif
-
 typedef struct s_state
 {
 	char	buf[BUFFER_SIZE];

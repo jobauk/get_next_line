@@ -20,19 +20,16 @@
 #  define BUFFER_SIZE 1024
 # endif
 
-# if BUFFER_SIZE < 1
-#  undef BUFFER_SIZE
-#  define BUFFER_SIZE 0
-# endif
+typedef struct s_state	t_state;
 
-typedef struct s_state
+struct s_state
 {
-	char			buf[BUFFER_SIZE + (BUFFER_SIZE == 0)];
-	size_t			i;
-	ssize_t			n;
-	int				fd;
-	struct s_state	*next;
-}			t_state;
+	char	buf[BUFFER_SIZE];
+	size_t	i;
+	ssize_t	n;
+	int		fd;
+	t_state	*next;
+};
 
 typedef struct s_string
 {
