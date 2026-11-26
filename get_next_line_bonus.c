@@ -6,7 +6,7 @@
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/11/26 01:11:14 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/11/26 01:51:55 by jaukes        ########   odam.nl         */
+/*   Updated: 2026/11/26 02:15:49 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,3 +101,68 @@ char	*get_next_line(int fd)
 		delete_state(node);
 	return (line);
 }
+
+// #include <fcntl.h>
+// #include <stdio.h>
+// #include <string.h>
+
+// int	main(int argc, char **argv)
+// {
+// 	int		fds[2];
+// 	int		second;
+// 	int		i;
+// 	char	*line;
+
+// 	if (argc != 3)
+// 	{
+// 		fprintf(stderr, "usage: %s file1 file2\n", argv[0]);
+// 		return (1);
+// 	}
+// 	fds[0] = open(argv[1], O_RDONLY);
+// 	if (fds[0] < 0)
+// 	{
+// 		perror(argv[1]);
+// 		return (1);
+// 	}
+// 	second = open(argv[2], O_RDONLY);
+// 	if (second < 0)
+// 	{
+// 		perror(argv[2]);
+// 		close(fds[0]);
+// 		return (1);
+// 	}
+// 	fds[1] = fcntl(second, F_DUPFD, 100);
+// 	if (fds[1] < 0)
+// 	{
+// 		perror("F_DUPFD");
+// 		close(second);
+// 		close(fds[0]);
+// 		return (1);
+// 	}
+// 	close(second);
+// 	while (fds[0] >= 0 || fds[1] >= 0)
+// 	{
+// 		i = 0;
+// 		while (i < 2)
+// 		{
+// 			if (fds[i] >= 0)
+// 			{
+// 				line = get_next_line(fds[i]);
+// 				if (line)
+// 				{
+// 					printf("fd %d: %s", fds[i], line);
+// 					if (!strchr(line, '\n'))
+// 						puts(" [no trailing newline]");
+// 					free(line);
+// 				}
+// 				else
+// 				{
+// 					close(fds[i]);
+// 					fds[i] = -1;
+// 				}
+// 			}
+// 			i++;
+// 		}
+// 	}
+// 	return (0);
+// }
