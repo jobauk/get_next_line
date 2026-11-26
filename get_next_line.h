@@ -34,13 +34,7 @@ typedef struct s_string
 	size_t	cap;
 }			t_string;
 
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-
-void	*ft_realloc(void *ptr, size_t old, size_t new);
-
 char	*get_next_line(int fd);
-
-int		string_init(t_string *str, size_t initial);
 
 int		string_push(t_string *str, char c);
 

@@ -6,7 +6,7 @@
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/12 23:20:17 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/11/19 13:00:41 by jaukes        ########   odam.nl         */
+/*   Updated: 2026/11/26 14:30:54 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+static void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	size_t	i;
 
@@ -30,7 +30,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-void	*ft_realloc(void *ptr, size_t old, size_t new)
+static void	*ft_realloc(void *ptr, size_t old, size_t new)
 {
 	void	*new_ptr;
 
@@ -45,7 +45,7 @@ void	*ft_realloc(void *ptr, size_t old, size_t new)
 	return (new_ptr);
 }
 
-int	string_init(t_string *str, size_t initial)
+static int	string_init(t_string *str, size_t initial)
 {
 	str->buf = malloc(initial * sizeof(char));
 	if (!str->buf)

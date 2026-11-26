@@ -6,7 +6,7 @@
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/09/29 14:41:24 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/11/26 02:12:26 by jaukes        ########   odam.nl         */
+/*   Updated: 2026/11/26 14:31:35 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	fd_getc(int fd)
+static int	fd_getc(int fd)
 {
 	static t_state	state;
 
