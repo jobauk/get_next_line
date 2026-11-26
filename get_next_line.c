@@ -6,7 +6,7 @@
 /*   By: jaukes <jaukes@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/09/29 14:41:24 by jaukes        #+#    #+#                 */
-/*   Updated: 2026/11/19 13:26:36 by jaukes        ########   odam.nl         */
+/*   Updated: 2026/11/26 01:07:26 by jaukes        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	fd_getc(int fd)
 		if (state->n <= 0)
 			return ((int)state->n);
 	}
-	return (state->buf[state->i++]);
+	return ((unsigned char)state->buf[state->i++]);
 }
 
 char	*get_next_line(int fd)
@@ -62,26 +62,26 @@ char	*get_next_line(int fd)
 	return (string_resize_fit(&str));
 }
 
-// #include <fcntl.h>
-// #include <stdio.h>
-// #include <string.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
 
-// int main(void) {
-// 	int fd;
+int main(void) {
+	int fd;
 
-// 	fd = open("input.txt", O_CREAT | O_RDWR);
-// 	// write(fd, "0", 1);
-// 	printf("\"%s\"\n", get_next_line(fd));
-// 	printf("\"%s\"\n", get_next_line(fd));
+	fd = open("input.txt", O_CREAT | O_RDWR);
+	// write(fd, "0", 1);
+	printf("\"%s\"\n", get_next_line(fd));
+	printf("\"%s\"\n", get_next_line(fd));
 
-// 	// close(fd);
-// 	// fd = open("input.txt", O_RDONLY);
-// 	// printf("\"%s\"\n", get_next_line(fd));
-// 	// printf("\"%s\"\n", get_next_line(fd));
+	// close(fd);
+	// fd = open("input.txt", O_RDONLY);
+	// printf("\"%s\"\n", get_next_line(fd));
+	// printf("\"%s\"\n", get_next_line(fd));
 
-// 	// fd = open("files/empty", O_RDWR);
-// 	// printf("\"%s\"\n", get_next_line(fd));
-// 	// printf("\"%s\"\n", get_next_line(fd));
+	// fd = open("files/empty", O_RDWR);
+	// printf("\"%s\"\n", get_next_line(fd));
+	// printf("\"%s\"\n", get_next_line(fd));
 
-// 	return 0;
-// }
+	return 0;
+}
